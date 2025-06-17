@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify, render_template
 import joblib
+import os
 from utils.features import extract_features
 
 app = Flask(__name__)
@@ -13,18 +14,18 @@ def home():
 
 @app.route('/predict', methods=['POST'])
 def predict():
-    password = request.form.get('password') or request.json.get('password')
+    password = request.form.get('password') or (request.json and request.json.get('password'))
     if not password:
         return jsonify({'error': 'Password required'}), 400
-    
+
     features = extract_features(password)
     strength = model.predict(features)[0]
-    
-    # Jika form HTML kirim, tampilkan di browser
+
     if request.form:
         return render_template("index.html", result=strength, password=password)
-    
+
     return jsonify({'strength': strength})
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))  # Railway akan beri PORT di env
+    app.run(debug=False, host='0.0.0.0', port=port)
