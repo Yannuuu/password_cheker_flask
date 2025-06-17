@@ -10,7 +10,9 @@ model = joblib.load("model/manual_password_model300.pkl")
 
 @app.route('/')
 def home():
-    return render_template('index.html')
+    return "Flask works!"
+
+
 
 @app.route('/predict', methods=['POST'])
 def predict():
