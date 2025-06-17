@@ -6,7 +6,7 @@ from utils.features import extract_features
 app = Flask(__name__)
 
 # Load model
-model = joblib.load("model/manual_password_model300.pkl")
+model = joblib.load("model/manual_password_model300baru.pkl")
 
 @app.route('/')
 def home():
