@@ -14,16 +14,14 @@ def home():
 
 @app.route('/predict', methods=['POST'])
 def predict():
-    password = request.form.get('password') or (request.json and request.json.get('password'))
-    
-    if not password:
-        return jsonify({'error': 'Password required'}), 400
-
     try:
+        password = request.form.get('password') or (request.json and request.json.get('password'))
+        if not password:
+            return jsonify({'error': 'Password required'}), 400
+
         features = extract_features(password)
         strength = model.predict(features)[0]
         return jsonify({'strength': strength})
-    
     except Exception as e:
-        # Ini sangat penting buat tahu apa error-nya
+        # Tangkap dan kirim error ke client
         return jsonify({'error': str(e)}), 500
